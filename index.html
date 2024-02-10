@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Include jQuery and jsPDF-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.4.1/jspdf.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <form id="pdfForm" autocomplete="off">
+        <input type="text" id="textInput" placeholder="Enter your text">
+        <button id="generatePdfBtn" type="button">Generate PDF</button>
+        <a id="viewPdfBtn" href="#" target="_blank" style="display: none;">View PDF</a>
+        <button id="sharePdfBtn" type="button" style="display: none;" onclick="sharePDF()">Share PDF</button>
+    </form>
+
+    <script>
+        var pdfBlob;
+
+        function sharePDF() {
+            
+            var pdfFile = new File([pdfBlob], "report.pdf", { type: 'application/pdf' });
+
+            navigator.share({ files: [pdfFile] });
+        };
+
+
+        $(document).ready(function () {
+            
+
+            // Generate Pdf
+            $('#generatePdfBtn').click(function () {
+
+                // Get the user input
+                var userInput = $('#textInput').val();
+
+                // Create a new jsPDF instance
+                var pdf = new jsPDF();
+
+                // Add the user input to the PDF
+                pdf.text(20, 20, userInput);
+
+                pdfBlob = pdf.output('blob');
+                
+                var pdfUrl = URL.createObjectURL(pdfBlob);
+
+                // Show view PDF button
+                $('#viewPdfBtn').attr('href', pdfUrl).show();
+                $('#sharePdfBtn').show();
+
+        });
+
+
+        });
+        
+    </script>
+</body>
+</html>
